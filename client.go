@@ -6,9 +6,11 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/kataras/iris/v12"
 	proto "github.com/sukvij/grpc-golang/protoc"
 
 	"github.com/gin-gonic/gin"
+	userController "github.com/sukvij/grpc-golang/user/controller"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -23,11 +25,13 @@ func main() {
 	}
 	client = proto.NewExampleClient(conn)
 	// implement rest api
-	r := gin.Default()
-	r.GET("/user", getAllUser)
-	r.GET("/user/:id", getUserById)
-	r.Run(":8000") // 8080
-
+	// r := gin.Default()
+	// r.GET("/user", getAllUser)
+	// r.GET("/user/:id", getUserById)
+	// r.Run(":8000") // 8080
+	app := iris.New()
+	userController.UserApis(app)
+	app.Listen(":8000")
 }
 
 func getUserById(c *gin.Context) {
