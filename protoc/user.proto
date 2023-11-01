@@ -1,19 +1,19 @@
-syntax  = "proto3";
+syntax = "proto3";
 
 option go_package = "./";
 
-service Example {
-    rpc GetUser(GetUserByIdInput) returns (User);
-}
-
-message GetUserByIdInput {
-    int32 userId = 1;
-}
-
-
 message User {
-    int32 Id = 1;
-    string Fname = 2;
-    string city = 3;
+    int32 id = 1;
+    string name = 2;
 }
 
+message userIdInput {
+    string userId = 1;
+}
+
+message Empty {}
+
+service Example {
+    rpc GellUserById (userIdInput) returns (User);
+    rpc GetAllUser (Empty) returns (stream User);
+}
