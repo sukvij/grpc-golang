@@ -1,9 +1,5 @@
 package main
 
-// Welcome to channel go guruji
-
-// Topic grpc bi-directional streaming
-
 import (
 	"context"
 	"fmt"
@@ -20,7 +16,7 @@ import (
 var client proto.ExampleClient
 
 func main() {
-	// Connection to internal grpc server
+
 	conn, err := grpc.Dial("localhost:9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
@@ -28,13 +24,13 @@ func main() {
 	client = proto.NewExampleClient(conn)
 
 	r := gin.Default()
-	r.GET("/sent-message/:message", clientConnectionServer)
-	r.Run(":8000") // 8080
+	r.GET("/user/:id", clientConnectionServer)
+	r.Run(":8000")
 
 }
 
 func clientConnectionServer(c *gin.Context) {
-	variable := c.Param("message")
+	variable := c.Param("id")
 	userId, _ := strconv.ParseInt(variable, 10, 64)
 	req := &proto.GetUserByIdInput{UserId: int32(userId)}
 	fmt.Println(userId)
