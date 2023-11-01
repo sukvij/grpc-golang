@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var users map[int32]*proto.User
+var users map[int64]*proto.User
 
 type server struct {
 	proto.UnimplementedExampleServer
@@ -36,17 +36,17 @@ func main() {
 func (s *server) GellUserById(ctx context.Context, req *proto.UserIdInput) (*proto.User, error) {
 	in := req.UserId
 	userId, _ := strconv.ParseInt(in, 10, 64)
-	user := users[int32(userId)]
+	user := users[userId]
 	return user, nil
 }
 
 func (s *server) GetAllUser(req *proto.Empty, strem proto.Example_GetAllUserServer) error {
-	users = make(map[int32]*proto.User)
-	user1 := &proto.User{Id: 1, Name: "salman"}
-	user2 := &proto.User{Id: 2, Name: "vinay"}
-	user3 := &proto.User{Id: 3, Name: "vijju"}
-	user4 := &proto.User{Id: 4, Name: "vijendra"}
-	user5 := &proto.User{Id: 5, Name: "aamir"}
+	users = make(map[int64]*proto.User)
+	user1 := &proto.User{Id: 1, FName: "salman"}
+	user2 := &proto.User{Id: 2, FName: "vinay"}
+	user3 := &proto.User{Id: 3, FName: "vijju"}
+	user4 := &proto.User{Id: 4, FName: "vijendra"}
+	user5 := &proto.User{Id: 5, FName: "aamir"}
 	users[1] = user1
 	users[2] = user2
 	users[3] = user3
@@ -64,5 +64,6 @@ func (s *server) GetAllUser(req *proto.Empty, strem proto.Example_GetAllUserServ
 			return errors.New("unable to send data from server")
 		}
 	}
+
 	return nil
 }

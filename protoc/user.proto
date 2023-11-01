@@ -1,10 +1,13 @@
 syntax = "proto3";
-
+package protoc;
 option go_package = "./";
-
 message User {
-    int32 id = 1;
-    string name = 2;
+    int64 Id = 1;
+    string FName = 2;
+    string City = 3;
+    string Phone = 4;
+    string float = 5;
+    bool Married = 6;
 }
 
 message userIdInput {

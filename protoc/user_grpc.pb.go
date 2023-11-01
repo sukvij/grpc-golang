@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v4.24.4
-// source: User.proto
+// source: user.proto
 
 package __
 
@@ -36,7 +36,7 @@ func NewExampleClient(cc grpc.ClientConnInterface) ExampleClient {
 
 func (c *exampleClient) GellUserById(ctx context.Context, in *UserIdInput, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
-	err := c.cc.Invoke(ctx, "/Example/GellUserById", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/protoc.Example/GellUserById", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (c *exampleClient) GellUserById(ctx context.Context, in *UserIdInput, opts 
 }
 
 func (c *exampleClient) GetAllUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Example_GetAllUserClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Example_ServiceDesc.Streams[0], "/Example/GetAllUser", opts...)
+	stream, err := c.cc.NewStream(ctx, &Example_ServiceDesc.Streams[0], "/protoc.Example/GetAllUser", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ func _Example_GellUserById_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Example/GellUserById",
+		FullMethod: "/protoc.Example/GellUserById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ExampleServer).GellUserById(ctx, req.(*UserIdInput))
@@ -150,7 +150,7 @@ func (x *exampleGetAllUserServer) Send(m *User) error {
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Example_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Example",
+	ServiceName: "protoc.Example",
 	HandlerType: (*ExampleServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -165,5 +165,5 @@ var Example_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "User.proto",
+	Metadata: "user.proto",
 }
