@@ -1,0 +1,19 @@
+syntax  = "proto3";
+
+option go_package = "./";
+
+service Example {
+    rpc GetUser(GetUserByIdInput) returns (User);
+}
+
+message GetUserByIdInput {
+    int32 userId = 1;
+}
+
+
+message User {
+    int32 Id = 1;
+    string Fname = 2;
+    string city = 3;
+}
+
