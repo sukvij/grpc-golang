@@ -46,8 +46,9 @@ func createUser(c iris.Context) {
 		c.JSON(errs.Error())
 		return
 	}
-	fmt.Println(user)
-	c.JSON(user)
+	req := &proto.User{Id: user.Id, FName: user.Fname, City: user.City, Phone: user.Phone, Height: float32(user.Height), Married: user.Married}
+	res, _ := client.CreateUser(context.TODO(), req)
+	c.JSON(res)
 }
 
 func getUserById(c iris.Context) {

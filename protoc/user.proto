@@ -6,7 +6,7 @@ message User {
     string FName = 2;
     string City = 3;
     string Phone = 4;
-    string float = 5;
+    float Height = 5;
     bool Married = 6;
 }
 

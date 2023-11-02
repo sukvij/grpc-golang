@@ -60,11 +60,6 @@ func (s *server) GetAllUser(req *proto.Empty, strem proto.Example_GetAllUserServ
 	users[3] = user3
 	users[4] = user4
 	users[5] = user5
-	// users = append(users, user1)
-	// users = append(users, user2)
-	// users = append(users, user3)
-	// users = append(users, user4)
-	// users = append(users, user5)
 	for _, element := range users {
 		err := strem.Send(element)
 		time.Sleep(time.Second)
