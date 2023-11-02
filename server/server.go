@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net"
 	"strconv"
 	"time"
@@ -20,6 +21,7 @@ type server struct {
 }
 
 func main() {
+	users = make(map[int64]*proto.User)
 	listener, tcpErr := net.Listen("tcp", ":9000")
 	if tcpErr != nil {
 		panic(tcpErr)
@@ -33,6 +35,12 @@ func main() {
 	}
 }
 
+func (s *server) CreateUser(ctx context.Context, req *proto.User) (*proto.User, error) {
+	fmt.Println(req)
+	users[req.Id] = req
+	return req, nil
+}
+
 func (s *server) GellUserById(ctx context.Context, req *proto.UserIdInput) (*proto.User, error) {
 	in := req.UserId
 	userId, _ := strconv.ParseInt(in, 10, 64)
@@ -41,7 +49,7 @@ func (s *server) GellUserById(ctx context.Context, req *proto.UserIdInput) (*pro
 }
 
 func (s *server) GetAllUser(req *proto.Empty, strem proto.Example_GetAllUserServer) error {
-	users = make(map[int64]*proto.User)
+	// users = make(map[int64]*proto.User)
 	user1 := &proto.User{Id: 1, FName: "salman"}
 	user2 := &proto.User{Id: 2, FName: "vinay"}
 	user3 := &proto.User{Id: 3, FName: "vijju"}

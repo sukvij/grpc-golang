@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ExampleClient interface {
 	GellUserById(ctx context.Context, in *UserIdInput, opts ...grpc.CallOption) (*User, error)
 	GetAllUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Example_GetAllUserClient, error)
+	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*User, error)
 }
 
 type exampleClient struct {
@@ -75,12 +76,22 @@ func (x *exampleGetAllUserClient) Recv() (*User, error) {
 	return m, nil
 }
 
+func (c *exampleClient) CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*User, error) {
+	out := new(User)
+	err := c.cc.Invoke(ctx, "/protoc.Example/CreateUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ExampleServer is the server API for Example service.
 // All implementations must embed UnimplementedExampleServer
 // for forward compatibility
 type ExampleServer interface {
 	GellUserById(context.Context, *UserIdInput) (*User, error)
 	GetAllUser(*Empty, Example_GetAllUserServer) error
+	CreateUser(context.Context, *User) (*User, error)
 	mustEmbedUnimplementedExampleServer()
 }
 
@@ -93,6 +104,9 @@ func (UnimplementedExampleServer) GellUserById(context.Context, *UserIdInput) (*
 }
 func (UnimplementedExampleServer) GetAllUser(*Empty, Example_GetAllUserServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetAllUser not implemented")
+}
+func (UnimplementedExampleServer) CreateUser(context.Context, *User) (*User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
 func (UnimplementedExampleServer) mustEmbedUnimplementedExampleServer() {}
 
@@ -146,6 +160,24 @@ func (x *exampleGetAllUserServer) Send(m *User) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Example_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServer).CreateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protoc.Example/CreateUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServer).CreateUser(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Example_ServiceDesc is the grpc.ServiceDesc for Example service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -156,6 +188,10 @@ var Example_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GellUserById",
 			Handler:    _Example_GellUserById_Handler,
+		},
+		{
+			MethodName: "CreateUser",
+			Handler:    _Example_CreateUser_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

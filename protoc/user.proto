@@ -19,4 +19,5 @@ message Empty {}
 service Example {
     rpc GellUserById (userIdInput) returns (User);
     rpc GetAllUser (Empty) returns (stream User);
+    rpc CreateUser(User) returns (User);
 }
