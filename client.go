@@ -8,8 +8,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12"
 
-	userMode "github.com/sukvij/grpc-golang/model"
 	proto "github.com/sukvij/grpc-golang/protoc"
+	userMode "github.com/sukvij/grpc-golang/user/model"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
