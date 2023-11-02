@@ -23,7 +23,7 @@ func (repository *Repository) CreateUser() *userMode.User {
 	user := repository.User
 	client := repository.Client
 
-	req := &proto.User{Id: user.Id, FName: user.Fname, City: user.City, Phone: user.Phone, Height: float32(user.Height), Married: user.Married}
+	req := mapper.MappingFromUserModelToProtoModel(*user)
 	res, _ := client.CreateUser(context.TODO(), req)
 	fmt.Println(res)
 
