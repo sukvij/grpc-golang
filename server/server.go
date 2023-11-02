@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net"
-	"strconv"
 	"time"
 
 	proto "github.com/sukvij/grpc-golang/protoc"
@@ -42,8 +41,7 @@ func (s *server) CreateUser(ctx context.Context, req *proto.User) (*proto.User, 
 }
 
 func (s *server) GellUserById(ctx context.Context, req *proto.UserIdInput) (*proto.User, error) {
-	in := req.UserId
-	userId, _ := strconv.ParseInt(in, 10, 64)
+	userId := req.UserId
 	user := users[userId]
 	return user, nil
 }
