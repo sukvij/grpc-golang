@@ -6,6 +6,7 @@ import (
 	"io"
 
 	proto "github.com/sukvij/grpc-golang/protoc"
+	mapper "github.com/sukvij/grpc-golang/user/mapper"
 	userMode "github.com/sukvij/grpc-golang/user/model"
 )
 
@@ -25,7 +26,9 @@ func (repository *Repository) CreateUser() *userMode.User {
 	req := &proto.User{Id: user.Id, FName: user.Fname, City: user.City, Phone: user.Phone, Height: float32(user.Height), Married: user.Married}
 	res, _ := client.CreateUser(context.TODO(), req)
 	fmt.Println(res)
-	return nil
+
+	x := mapper.Mapping(res)
+	return &x
 }
 
 func (repository *Repository) GetUserById() *userMode.User {
@@ -34,10 +37,11 @@ func (repository *Repository) GetUserById() *userMode.User {
 	req := &proto.UserIdInput{UserId: repository.User.Id}
 	res, _ := client.GellUserById(context.TODO(), req)
 	fmt.Println(res)
-	return nil
+	x := mapper.Mapping(res)
+	return &x
 }
 
-func (repository *Repository) GetAllUser() *userMode.User {
+func (repository *Repository) GetAllUser() []*userMode.User {
 	client := repository.Client
 	stream, err := client.GetAllUser(context.TODO(), &proto.Empty{})
 	if err != nil {
@@ -45,14 +49,16 @@ func (repository *Repository) GetAllUser() *userMode.User {
 		return nil
 	}
 
-	var allUsers []*proto.User
+	var allUsers []*userMode.User
+
 	for {
 		message, err := stream.Recv()
 		if err == io.EOF {
 			break
 		}
-		allUsers = append(allUsers, message)
+		temp := mapper.Mapping(message)
+		allUsers = append(allUsers, &temp)
 		fmt.Println("Server message:- ", message)
 	}
-	return nil
+	return allUsers
 }

@@ -33,7 +33,7 @@ func (service *Service) CreateUser() *userMode.User {
 	return res
 }
 
-func (service *Service) GetAllUser() *userMode.User {
+func (service *Service) GetAllUser() []*userMode.User {
 	repo := &userRepo.Repository{User: service.User, Client: service.Client}
 	res := repo.GetAllUser()
 	return res
