@@ -20,27 +20,36 @@ func NewService(user *userMode.User, Client proto.ExampleClient) *Service {
 	return &Service{User: user, Client: Client}
 }
 
-func (service *Service) CreateUser() *userMode.User {
+func (service *Service) CreateUser() (*userMode.User, error) {
 	user := service.User
 	validate = validator.New()
 	errs := validate.Struct(user)
 	if errs != nil {
 		fmt.Println(errs.Error())
-		return nil
+		return nil, errs
 	}
 	repo := &userRepo.Repository{User: service.User, Client: service.Client}
-	res := repo.CreateUser()
-	return res
+	res, err := repo.CreateUser()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
-func (service *Service) GetAllUser() []*userMode.User {
+func (service *Service) GetAllUser() ([]*userMode.User, error) {
 	repo := &userRepo.Repository{User: service.User, Client: service.Client}
-	res := repo.GetAllUser()
-	return res
+	res, err := repo.GetAllUser()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
-func (service *Service) GetUserById() *userMode.User {
+func (service *Service) GetUserById() (*userMode.User, error) {
 	repo := &userRepo.Repository{User: service.User, Client: service.Client}
-	res := repo.GetUserById()
-	return res
+	res, err := repo.GetUserById()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

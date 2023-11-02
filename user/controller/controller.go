@@ -26,14 +26,22 @@ func createUser(ctx iris.Context) {
 	user := &userModel.User{}
 	ctx.ReadJSON(&user)
 	service := &userService.Service{User: user, Client: client}
-	result := service.CreateUser()
+	result, err := service.CreateUser()
+	if err != nil {
+		ctx.JSON(err.Error())
+		return
+	}
 	ctx.JSON(result)
 }
 
 func getAllUsers(ctx iris.Context) {
 	user := &userModel.User{}
 	service := &userService.Service{User: user, Client: client}
-	result := service.GetAllUser()
+	result, err := service.GetAllUser()
+	if err != nil {
+		ctx.JSON(err.Error())
+		return
+	}
 	ctx.JSON(result)
 }
 
@@ -43,6 +51,10 @@ func getUserById(ctx iris.Context) {
 	fmt.Println("userid : ", userId)
 	user := &userModel.User{Id: userId}
 	service := &userService.Service{User: user, Client: client}
-	result := service.GetUserById()
+	result, err := service.GetUserById()
+	if err != nil {
+		ctx.JSON(err.Error())
+		return
+	}
 	ctx.JSON(result)
 }
